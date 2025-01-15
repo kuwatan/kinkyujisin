@@ -11,7 +11,7 @@ while True:
     p2pquake_json = requests.get(p2pquake_url).json()
 #震央地名を取り出して、変数に代入する
     #Eq_name = p2pquake_json[0]["earthquake"]["hypocenter"]["name"]
-    Eq_name = "2025/01/15 18:28:20"
+    Eq_name = "2025/01/15 18:26:20"
     Eq_hukasa = p2pquake_json[0]["earthquake"]["hypocenter"]["depth"]
     Eq_maguni = p2pquake_json[0]["earthquake"]["hypocenter"]["magnitude"]
     Eq_sin = p2pquake_json[0]["earthquake"]["maxScale"]
@@ -38,9 +38,18 @@ while True:
     elif Eq_sin <10:
         Eq_sindo = "震度不明"
 
+    
+    
+    target_datetime = Eq_name
+    # 現在時刻を取得
     current_time = datetime.now()
-    formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-    
-    if formatted_time==Eq_name:
-        print(Eq_sindo)
-    
+
+    # もし指定日時が過去の場合はエラー表示
+    if target_datetime < current_time:
+        print()
+    else:
+        # 指定日時まで待機
+        while datetime.now() < target_datetime:
+            time.sleep(1)  # 1秒ごとにチェック（CPU負荷を軽減）
+            # 指定日時に到達したらメッセージを表示 
+            print("指定した日時になりました！")
